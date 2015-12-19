@@ -3,4 +3,4 @@ Git is a distributed version control system.
 git is a version 
 git is a free software
 [dev 6224937] add merge
-My stupid boss still prefers SVN.
+My stupid boss still prefers SVN
