@@ -3,26 +3,27 @@
 
 'mysql'
 
-__author__=zhangjian
+__author__='zhangjian'
 
  
 import pymysql.cursors
 connection = pymysql.connect(host='localhost',
-                             user='user',
-                             password='a1836810995',
-                             db='db',
-                             charset='utf8mb4',
+                             user='root',
+                             password='123456',
+                             db='kongjian',
+                             charset='utf8',
                              cursorclass=pymysql.cursors.DictCursor)
 try:
     with connection.cursor() as cursor:
-         sql = "insert into kongjian (id,shuoshuo) values(%s,%s)"
-         cursor.execute(sql, ('happy pinganye'))
+         sql = "insert into kongjian (shuoshuo) values(%s)"
+         cursor.execute(sql, ('哈哈'))
  
     connection.commit()
 
     with connection.cursor() as cursor:
-         sql = "select 'id','shuoshuo' from kongjian"
-         result=fetchone()
+         sql = "select id,shuoshuo from kongjian"
+         cursor.execute(sql)
+         result=cursor.fetchall()
          print(result)
 finally:
 	connection.close()
