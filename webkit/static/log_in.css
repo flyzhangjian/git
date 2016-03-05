@@ -1,0 +1,39 @@
+body#body{
+    background-color:blue;
+}
+div#container{
+    width:100%;
+    height:1000px;
+}
+div#head{
+    width:100%;
+    height:120px;
+    background-color:#99bbbb;
+    float:left;
+    text-align:center;
+}
+div#friends{
+    background-color:#ffff99;
+    width:20%;
+    height:100%;
+    float:left;
+}
+div#ideas{
+    width:80%;
+    height:100%;
+    background-color:#EEEEEE;
+    float:left;
+    text-align:center;
+    font-weight:bold;
+    font-size:120%;
+}
+P.name{
+    font-family:Georgia,serif;
+    font-style:italic;
+    font-size:150%;
+    font-weight:bold;
+}
+.log_out{
+    position:relative;
+    left:45%;
+}

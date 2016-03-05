@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> hello {{name}}</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='log_in.css')}}"}
+    </head>
+    
+    <body id="body">
+        <div id="container">
+            <div id="head">
+                <p class="name">hello {{name}}</p>
+                <form action="log_out" method="POST" class="log_out">
+                    <input type="SUBMIT" value="log_out"/>
+                </form>
+            </div>
+            <div id="friends">
+                <form action="friend" method="POST">
+                    <input type="TEXT" name="account_number" placeholder="your friends account_number"/>
+                    <input type="SUBMIT" value="search_friend"/>
+                    <div>
+                        <ul>
+                            <p class="name" style="color:blue">my_friends:</p>
+                            {% for the_friends in friends %}
+                            <li> <h>{{the_friends}}</h> <li>
+                            {% else %}
+                            <li><em> you have no friends in your list</em></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div id="ideas">
+                <form action="my_thoughts" method="POST">
+                    My thoughts:<input type="TEXT" name="my_thoughts" placeholder="write down your thoughts">
+                    <input type="SUBMIT" value="submit"/>
+                    <br/>
+                </form>
+                <div>
+                    <ul>
+                        <p class="name" style="color:blue"> my ideas:</p>
+                        <a href="the_request"><p class="name" style="color:blue"> your requests:</p> </a>
+                        {% for the_idea in shuoshuo %}
+                        <li> <h>{{the_idea}}</h><br />
+                            <form action="the_comments" method="POST">
+                                <input type="SUBMIT" value="make comment"/>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li> <em> there is no ideas in your zone</em></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
