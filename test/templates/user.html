@@ -4,19 +4,17 @@
     </head>
 
 <body>
-    <p> 你的数据库：</p>
     <div>
         <ul>
-            { % for databases in database % }
-            <li><h>{{databases}}</h></li>
-        </ul>
-        {% else %}
-        <p> there is no databases</p>
-        {% endfor %}
+        {% for the_friends in friends %}
+              <li> <h>{{the_friends}}</h> <li>
+               {% else %}
+          <li><em> you have no friends in your list</em></li>
+                {% endfor %}
+        </ul> 
+        <FORM action="back" method="POST">
+            <input type="SUBMIT" value="go back">
+        </FORM>
     </div>
-    <form action="database" method="POST">
-        <input type="TEXT" name="your_database" placeholder="your_database"><br/>
-        <input type="SUBMIT" value="查询">
-    </form>
-</body>
-</html>
+</body>         
+</html>                 

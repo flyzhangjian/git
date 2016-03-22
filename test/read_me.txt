@@ -1,0 +1,1 @@
+此网站需要在python3环境下，mysql数据库，数据库中有kongjian数据库，user_me表格，表格列为user_id(需要自增，并且为int)，user,password,time需要flask框架的支持

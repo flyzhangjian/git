@@ -57,7 +57,7 @@ def get_friends(user_id):
         )
     try:
         with connection.cursor() as cursor:
-            sql = "select his_friends_id from friends where the_user_id=%s"
+            sql = "select friends_name from friends where the_user_id=%s"
             cursor.execute(sql,(user_id))
             result=cursor.fetchall()
             print(result)
@@ -76,13 +76,50 @@ def get_request(the_user_id):
         )
     try:
         with connection.cursor() as cursor:
-            sql = "select friends_id from user_me where user_id=%s"
+            sql = "select friends_name from request where the_account_number=%s"
             cursor.execute(sql,(the_user_id))
             result=cursor.fetchall()
-            print(result)
 
     finally:
         connection.close()
+    return result
+
+def get_user_account_number(the_user_id):
+    connection=pymysql.connect(
+        host='localhost',
+        user='root',
+        password='123456',
+        db='kongjian',
+        charset='utf8'
+        )
+    try:
+        with connection.cursor() as cursor:
+            sql = "select account_number from user_me where user_id=%s"
+            cursor.execute(sql,(the_user_id))
+            result=cursor.fetchall()
+
+    finally:
+        connection.close()
+    
+    return result
+
+def get_friends_id(friends_name):
+    connection=pymysql.connect(
+        host='localhost',
+        user='root',
+        password='123456',
+        db='kongjian',
+        charset='utf8'
+        )
+    try:
+        with connection.cursor() as cursor:
+            sql = "select user_id from user_me where user=%s"
+            cursor.execute(sql,(friends_name))
+            result=cursor.fetchall()
+
+    finally:
+        connection.close()
+
     return result
 
 @app.route('/')
@@ -172,7 +209,7 @@ def my_thoughts():
 def search_friend():
     account_number=int(request.form['account_number'])
     the_idea=get_ideas(session['the_user_id'])
-    my_friends=get_friends(['the_user_id'])
+    my_friends=get_friends(session['the_user_id'])
     connection=pymysql.connect(
         host='localhost',
         user='root',
@@ -201,27 +238,69 @@ def log_out():
     print(session)
     return render_template('zhuye.html')
 
-@app.route('/the_request',methods=['POST'])
+@app.route('/the_request',methods=['POST','get'])
 def the_request():
-    my_friends=get_friends()
-    connection=pymysql.connect(
-        host='localhost',
-        user='root',
-        password='123456',
-        db='kongjian',
-        charset='utf8'
-        )
+    my_friends=get_friends(session['the_user_id'])
+    account_number_me=get_user_account_number(session['the_user_id'])
+    requests=get_request(account_number_me[0][0])
 
-    try:
-        with connection.cursor() as cursor:
-            sql = "select friends from user_me where user_id=%s"
-            cursor.execute(sql,(session['the_user_id']))
-            result=cursor.fetchall()
+    return render_template('log_in_friends.html',name=session['name'],friends=my_friends,request=requests)
 
-    finally:
-        connection.close()
+@app.route('/my_thoughts_me',methods=['POST','get'])
+def my_thoughts_me():
+    my_friends=get_friends(session['the_user_id'])
+    the_idea=get_ideas(session['the_user_id'])
 
-    return render_template('log_in.html',name=session['name'],friends=my_friends,friends_name=result)
+    return render_template('log_in.html',name=session['name'],shuoshuo=the_idea,friends=my_friends)
+
+@app.route('/make_friends',methods=['POST'])
+def make_friends():
+    account_number_me=get_user_account_number(session['the_user_id'])
+    requests=get_request(account_number_me[0][0])
+    requests_me=requests[0]
+    if request.form['agree']:
+        the_friends=get_friends_id(requests[0][0])
+        the_friends_id=the_friends[0][0]
+        print(the_friends_id)
+        connection=pymysql.connect(
+            host='localhost',
+            user='root',
+            password='123456',
+            db='kongjian',
+            charset='utf8'
+            )
+        try:
+            with connection.cursor() as cursor:
+                sql = "delete from request where the_account_number=%s"
+                cursor.execute(sql,(account_number_me))
+                sql = "insert into friends (the_user_id,his_friends_id,friends_name) values(%s,%s,%s)"
+                cursor.execute(sql,(session['the_user_id'],the_friends_id,requests_me))
+
+            connection.commit()
+        finally:
+            connection.close()
+
+#    if request.form['disagree']:
+#       connection=pymysql.connect(
+#           host='localhost',
+#           user='root',
+#           password='123456',
+#           db='kongjian',
+#           charset='utf8'
+#           )
+#       try:
+#           with connection.cursor() as cursor:
+#               sql = "delete from request where the_account_number=%s"
+#               cursor.execute(sql,(account_number_me))
+#
+#           connection.commit()
+#
+#       finally:
+#           connection.close()
+    my_friends=get_friends(session['the_user_id'])
+    requests=get_request(account_number_me)
+    return render_template('log_in_friends.html',name=session['name'],friends=my_friends,request=requests)
+
 
 if __name__ == '__main__':
     app.secret_key='DKMKKLFAMKKFMAKLKFJLKHF'
