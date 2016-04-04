@@ -3,7 +3,8 @@
     <head>
         <title> hello {{name}}</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='log_in.css')}}"}
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='log_in.css')}}"}>
+        <script type="text/javascript" src="{{url_for('static',filename='zhuye.js')}}"></script>
     </head>
     
     <body id="body">
@@ -20,12 +21,8 @@
                     <input type="SUBMIT" value="search_friend"/>
                     <div>
                         <ul>
-                            <p class="name" style="color:blue">my_friends:</p>
-                            {% for the_friends in friends %}
-                            <li> <h>{{the_friends}}</h> <li>
-                            {% else %}
-                            <li><em> you have no friends in your list</em></li>
-                            {% endfor %}
+                             <button class="name" style="color:blue" type="button" onclick="my_function()">my_friends:</button>
+                             <p id="log_in_friends"></p>
                         </ul>
                     </div>
                 </form>

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from flask import Flask,request,render_template,session,redirect,url_for
+import json
+
+from flask import Flask,request,render_template,session
 import pymysql.cursors,time
 app=Flask(__name__)
 
@@ -21,6 +23,7 @@ def get_user_id(account_number_me):
             sql="select user_id from user_me where account_number=%s"
             cursor.execute(sql,(account_number_me))
             result=cursor.fetchall()
+            print(result)
             user_id=result[0][0]
             print(user_id)
     finally:
@@ -152,7 +155,7 @@ def set():
         connection.close()
     return render_template('zhuye.html')
 
-@app.route('/log_in.html',methods=['POST'])
+@app.route('/log_in',methods=['POST'])
 def log_in():
     account_number_me=int(request.form['account_number'])
     password_me=int(request.form['password'])
@@ -175,12 +178,25 @@ def log_in():
         if password_me==password:
             session['the_user_id']=user_id
             session['name']=users[0]['user']
-            print(session)
-            the_idea=get_ideas(session['the_user_id'])
-            my_friends=get_friends(session['the_user_id'])
-            return render_template('log_in.html',name=session['name'],shuoshuo=the_idea,friends=my_friends)
+            check=json.dumps({"result":1})
+            return check
+        else:
+            check=json.dumps({"result":0})
+            return check
+
     finally:
         connection.close()
+
+@app.route('/log_in.html',methods=['POST','GET'])
+def log_in_done():
+    the_idea = get_ideas(session['the_user_id'])
+    return render_template('log_in.html',name = session['name'],shuoshuo = the_idea)
+
+@app.route('/my_friends',methods=['POST','GET'])
+def get_my_friends():
+    my_friends=json.dumps(get_friends(session['the_user_id']))
+    print(my_friends)
+    return my_friends
 
 @app.route('/my_thoughts',methods=['POST'])
 def my_thoughts():
