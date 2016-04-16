@@ -26,6 +26,7 @@ div.div{
          }
          div.account_number{
              width:350px;
+             float:left;
          }
          div.password{
              width:350px;

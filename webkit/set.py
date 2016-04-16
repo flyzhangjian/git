@@ -5,6 +5,7 @@ import json
 
 from flask import Flask,request,render_template,session
 import pymysql.cursors,time
+import user
 app=Flask(__name__)
 
 def get_time():
@@ -160,7 +161,7 @@ def log_in():
     account_number_me=int(request.form['account_number'])
     password_me=int(request.form['password'])
     user_id=get_user_id(account_number_me)
-    print(user_id)
+    test = user.Users(account_number_me,user_id,'test')
     connection=pymysql.connect(
         host='localhost',
         user='root',
@@ -191,6 +192,32 @@ def log_in():
 def log_in_done():
     the_idea = get_ideas(session['the_user_id'])
     return render_template('log_in.html',name = session['name'],shuoshuo = the_idea)
+
+@app.route('/check_account_number',methods=['POST'])
+def check_account_number():
+    account_number_me = int(request.form['account_number'])
+    print(account_number_me)
+    connection = pymysql.connect(
+        host = 'localhost',
+        user = 'root',
+        db = 'kongjian',
+        password = '123456',
+        charset = 'utf8'
+        )
+    try:
+        with connection.cursor() as cursor:
+            sql = "select account_number from user_me"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            for i in result:
+                print(i)
+                if account_number_me in i:
+                    print("yes")
+                    return json.dumps({"result":1})
+            return json.dumps({"result":0})
+    finally:
+        connection.close()
+            
 
 @app.route('/my_friends',methods=['POST','GET'])
 def get_my_friends():

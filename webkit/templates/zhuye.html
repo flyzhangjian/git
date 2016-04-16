@@ -9,9 +9,12 @@
     <div class="div">
         <div class="account_number">
             your user name:
-            <input  id="account_number" type="TEXT" name="account_number" placeholder="your account number">
-            <br/>
+            <input  id="account_number" type="TEXT" name="account_number" placeholder="your account number" onchange="check_account_number()">
         </div>
+           <div class="the_warning">
+            <span style="color:red;font-size:15px;width" id="the_wrong_account_number"></span>
+            <br/>
+           </div>
         <div class="password">
             your password:
             <input id="password" type="PASSWORD" name="password" placeholder="your password word">
