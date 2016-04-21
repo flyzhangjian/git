@@ -5,32 +5,12 @@ import json
 
 from flask import Flask,request,render_template,session
 import pymysql.cursors,time
-import user
+import user_get_id
 app=Flask(__name__)
 
 def get_time():
     return time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time()))
 
-def get_user_id(account_number_me):
-    connection=pymysql.connect(
-        host='localhost',
-        user='root',
-        password='123456',
-        db='kongjian',
-        charset='utf8'        
-        )
-    try:
-        with connection.cursor() as cursor:
-            sql="select user_id from user_me where account_number=%s"
-            cursor.execute(sql,(account_number_me))
-            result=cursor.fetchall()
-            print(result)
-            user_id=result[0][0]
-            print(user_id)
-    finally:
-        connection.close()
-
-    return user_id
 
 def get_ideas(user_id):
     connection=pymysql.connect(
@@ -107,25 +87,6 @@ def get_user_account_number(the_user_id):
     
     return result
 
-def get_friends_id(friends_name):
-    connection=pymysql.connect(
-        host='localhost',
-        user='root',
-        password='123456',
-        db='kongjian',
-        charset='utf8'
-        )
-    try:
-        with connection.cursor() as cursor:
-            sql = "select user_id from user_me where user=%s"
-            cursor.execute(sql,(friends_name))
-            result=cursor.fetchall()
-
-    finally:
-        connection.close()
-
-    return result
-
 @app.route('/')
 def init():
     return render_template('zhuye.html')
@@ -160,8 +121,9 @@ def set():
 def log_in():
     account_number_me=int(request.form['account_number'])
     password_me=int(request.form['password'])
-    user_id=get_user_id(account_number_me)
-    test = user.Users(account_number_me,user_id,'test')
+    get_id = user_get_id.Users(account_number_me)
+    print(get_id.account_number_me)
+    user_id = get_id.get_user_id()
     connection=pymysql.connect(
         host='localhost',
         user='root',
@@ -210,7 +172,6 @@ def check_account_number():
             cursor.execute(sql)
             result = cursor.fetchall()
             for i in result:
-                print(i)
                 if account_number_me in i:
                     print("yes")
                     return json.dumps({"result":1})
@@ -302,7 +263,8 @@ def make_friends():
     requests=get_request(account_number_me[0][0])
     requests_me=requests[0]
     if request.form['agree']:
-        the_friends=get_friends_id(requests[0][0])
+        get_id = user_get_id.Users(account_number_me,session['name'])
+        the_friends=get_id.get_friends_id(requests[0][0])
         the_friends_id=the_friends[0][0]
         print(the_friends_id)
         connection=pymysql.connect(
