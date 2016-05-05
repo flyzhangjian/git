@@ -132,7 +132,7 @@ def search_friend():
     return render_template('log_in.html',name=session['name'],shuoshuo=the_idea,friends=my_friends)
 
 
-@app.route('/log_out',methods=['post'])
+@app.route('/log_out',methods=['post','get'])
 def log_out():
     session.pop('name',None)
     session.pop('the_user_id',None)

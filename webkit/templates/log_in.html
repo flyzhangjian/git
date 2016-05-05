@@ -1,33 +1,11 @@
 <!DOCTYPE html>
-<html>
-    <head>
+{% extends "home_base.html" %}
+{% block head %}
         <title> hello {{name}}</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='log_in.css')}}"}>
-        <script type="text/javascript" src="{{url_for('static',filename='zhuye.js')}}"></script>
-    </head>
-    
-    <body id="body">
-        <div id="container">
-            <div id="head">
-                <p class="name">hello {{name}}</p>
-                <form action="log_out" method="POST" class="log_out">
-                    <input type="SUBMIT" value="log_out"/>
-                </form>
-            </div>
-            <div id="friends">
-                <form action="friend" method="POST">
-                    <input type="TEXT" name="account_number" placeholder="your friends account_number"/>
-                    <input type="SUBMIT" value="search_friend"/>
-                    <div>
-                        <ul>
-                             <button class="name" style="color:blue" type="button" onclick="my_function()">my_friends:</button>
-                             <p id="log_in_friends"></p>
-                        </ul>
-                    </div>
-                </form>
-            </div>
-            <div id="ideas">
+{% endblock %}
+
+{% block body %}
+            <div>
                 <form action="my_thoughts" method="POST">
                     My thoughts:<input type="TEXT" name="my_thoughts" placeholder="write down your thoughts">
                     <input type="SUBMIT" value="submit"/>
@@ -36,7 +14,6 @@
                 <div>
                     <ul>
                         <p class="name" style="color:blue"> my ideas:</p>
-                        <a href="the_request"><p class="name" style="color:blue"> your requests:</p> </a>
                         {% for the_idea in shuoshuo %}
                         <li> <h>{{the_idea}}</h><br />
                             <form action="the_comments" method="POST">
@@ -49,6 +26,4 @@
                     </ul>
                 </div>
             </div>
-        </div>
-    </body>
-</html>
+{% endblock %}
