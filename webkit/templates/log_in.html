@@ -2,28 +2,50 @@
 {% extends "home_base.html" %}
 {% block head %}
         <title> hello {{name}}</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap-3.3.5-dist/css/bootstrap.min.css')}}">
 {% endblock %}
 
 {% block body %}
             <div>
-                <form action="my_thoughts" method="POST">
-                    My thoughts:<input type="TEXT" name="my_thoughts" placeholder="write down your thoughts">
-                    <input type="SUBMIT" value="submit"/>
-                    <br/>
+                <form action="my_thoughts" method="POST" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="font-size:20px">My thoughts:</label>
+                        <div class="col-sm-8">
+                            <input type="TEXT" name="my_thoughts" class="form-control" rows="3" placeholder="write down your thoughts">
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="btn btn-primary active" type="SUBMIT" value="submit"/>
+                        </div>
+                         <br/>
+                    </div>
                 </form>
                 <div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
                     <ul>
-                        <p class="name" style="color:blue"> my ideas:</p>
+                        <h1 style="color:blue"> my ideas:</h1>
                         {% for the_idea in shuoshuo %}
-                        <li> <h>{{the_idea}}</h><br />
-                            <form action="the_comments" method="POST">
-                                <input type="SUBMIT" value="make comment"/>
+                        <div class="jumbotron">
+                        <li> <h4>  {{the_idea[0]}}</h4><br />
+                            <h class="text-primary">  {{the_idea[1]}}</h>
+                            <form action="the_comments" method="POST" class="form-horizontal">
+                                <div class="form-grop">
+                                    <div class="col-sm-10">
+                                    <input type="TEXT" name="my_comment" class="form-control" placeholder="Write down your comments">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input class="btn btn-primary active" type="SUBMIT" value = "make comments">
+                                    </div>
+                                </div>
                             </form>
                         </li>
+                        </div>
                         {% else %}
                         <li> <em> there is no ideas in your zone</em></li>
                         {% endfor %}
                     </ul>
+                    <div>
+                    <div class="col-sm-2"></div>
                 </div>
             </div>
 {% endblock %}

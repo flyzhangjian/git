@@ -2,7 +2,6 @@
 # coding=utf-8
 
 import json
-
 from flask import Flask,request,render_template,session
 import time
 import user_get_id,user_get_ideas,user_get_request 
